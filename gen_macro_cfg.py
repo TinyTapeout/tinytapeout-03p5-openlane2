@@ -74,7 +74,7 @@ for y in range(ROWS):
 
         # Right branch
         pos_x = RIGHT_MUX_X - x * 170.66
-        if validate_slot_height(y + 1, x + 16, valid_heights=[108.800]):
+        if validate_slot_height(y + 1, x + 16, valid_heights=[108.800, 220.320]):
             macrofile.write(
                 f"tt_top1.branch\[{mux_idx+1}\].col_um\[{x}\].um_top_I.block_{mux_idx+1}_{x+16}.tt_um_I {pos_x: <7.2f} {top_y:.2f}   S\n"
             )

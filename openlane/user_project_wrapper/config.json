@@ -50,7 +50,8 @@
         "dir::../../lef/tt_um_thorkn_vgaclock.lef",
         "dir::../../lef/tt_um_wokwi_347497504164545108.lef",
         "dir::../../lef/tt_um_wokwi_347417602591556180.lef",
-        "dir::../../lef/tt_um_wokwi_347144898258928211.lef"
+        "dir::../../lef/tt_um_wokwi_347144898258928211.lef",
+        "dir::../../lef/tt_um_millerresearch_top.lef"
     ],
     "EXTRA_GDS_FILES": [
         "dir::../../gds/tt_ctrl.gds",
@@ -79,7 +80,8 @@
         "dir::../../gds/tt_um_thorkn_vgaclock.gds",
         "dir::../../gds/tt_um_wokwi_347497504164545108.gds",
         "dir::../../gds/tt_um_wokwi_347417602591556180.gds",
-        "dir::../../gds/tt_um_wokwi_347144898258928211.gds"
+        "dir::../../gds/tt_um_wokwi_347144898258928211.gds",
+        "dir::../../gds/tt_um_millerresearch_top.gds"
     ],
     "RUN_KLAYOUT_XOR": 0,
     "RUN_KLAYOUT_DRC": 0,
