@@ -43,7 +43,8 @@
         "dir::../../lef/tt_um_loopback.lef",
         "dir::../../lef/tt_um_power_test.lef",
         "dir::../../lef/tt_um_psychogenic_neptuneproportional.lef",
-        "dir::../../lef/tt_um_urish_sram_poc.lef"
+        "dir::../../lef/tt_um_urish_sram_poc.lef",
+        "dir::../../lef/tt_um_htfab_totp.lef"
     ],
     "EXTRA_GDS_FILES": [
         "dir::../../gds/tt_ctrl.gds",
@@ -65,7 +66,8 @@
         "dir::../../gds/tt_um_loopback.gds",
         "dir::../../gds/tt_um_power_test.gds",
         "dir::../../gds/tt_um_psychogenic_neptuneproportional.gds",
-        "dir::../../gds/tt_um_urish_sram_poc.gds"
+        "dir::../../gds/tt_um_urish_sram_poc.gds",
+        "dir::../../gds/tt_um_htfab_totp.gds"
     ],
     "RUN_KLAYOUT_XOR": 0,
     "RUN_KLAYOUT_DRC": 0,
