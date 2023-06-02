@@ -79,9 +79,9 @@
   status: active
   fill: false
 20:
-  url: https://github.com/TinyTapeout/tt03p5-test
+  url: https://github.com/ThorKn/tt03p5-vgaclock-02
   status: active
-  fill: true
+  fill: false
 21:
   url: https://github.com/TinyTapeout/tt03p5-test
   status: active
