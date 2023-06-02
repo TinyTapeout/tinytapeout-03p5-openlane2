@@ -39,6 +39,7 @@ jobs:
       with:
         repository: tinytapeout/tt-multiplexer
         path: tt-multiplexer
+        ref: tt03p5
 
     # get caravel makefile and management core for sims. need PDK for some of the verification
     - name: caravel & PDK
@@ -74,11 +75,6 @@ jobs:
     # install projects
     - name: configure for test
       run: python ./tt/configure.py --update-caravel --test
-
-    - name: patch tt-multiplexer
-      run: |
-        git apply --directory=tt-multiplexer tt_top.patch
-        git apply --directory=tt-multiplexer gen_tt_user_module.sram.patch
 
     # generate the tt mux verilog that instantiates all the modules - use the test version
     - name: module config

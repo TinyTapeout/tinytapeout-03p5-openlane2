@@ -41,13 +41,7 @@ jobs:
       with:
         repository: tinytapeout/tt-multiplexer
         path: tt-multiplexer
-
-    # tristate & num modules patch
-    - name: patch tt-multiplexer
-      run: |
-        git apply --directory=tt-multiplexer tt_mux.patch
-        git apply --directory=tt-multiplexer tt_top.patch
-        git apply --directory=tt-multiplexer gen_tt_user_module.sram.patch
+        ref: tt03p5
 
     # build pdk - have to move this back above to get caravel makefile
     - name: pdk & openlane & precheck

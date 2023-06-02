@@ -18,23 +18,9 @@ export OPENLANE_IMAGE_NAME=efabless/openlane:2023.05.19
 export PDK=sky130A
 make setup
 
-git clone https://github.com/TinyTapeout/tt-multiplexer/
+git clone -b tt03p5 https://github.com/TinyTapeout/tt-multiplexer/
 pip install -r tt-multiplexer/proto/requirements.txt
 make gen-user-module
-```
-
-Then apply a patch to `tt-multiplexer/proto/tt_mux.v`, which sets the number of columns per mux to 8,
-and works around an issue with `yosys` inserting buffers on the `spine_ow` signals, after the tristate buffers output.
-
-```
-git apply --directory=tt-multiplexer tt_mux.patch
-```
-
-Then also apply the following patches, to enable sram support and caravel logic analyzer debugging:
-
-```
-git apply --directory=tt-multiplexer gen_tt_user_module.sram.patch
-git apply --directory=tt-multiplexer tt_top.patch
 ```
 
 Important: make sure you are using efabless/openlane docker tag 2023.05.19 (or newer). 

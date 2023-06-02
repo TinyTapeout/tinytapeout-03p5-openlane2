@@ -24,6 +24,7 @@ jobs:
       with:
         repository: tinytapeout/tt-multiplexer
         path: tt-multiplexer
+        ref: tt03p5
 
     - name: checkout tt-support-tools repo
       uses: actions/checkout@v3
@@ -68,12 +69,6 @@ jobs:
     - name: uncompress gds
       run: | 
         make uncompress
-
-    - name: patch tt-multiplexer
-      run: |
-        git apply --directory=tt-multiplexer tt_mux.patch
-        git apply --directory=tt-multiplexer tt_top.patch
-        git apply --directory=tt-multiplexer gen_tt_user_module.sram.patch
 
     - name: generate tt_user_module.v
       run: make gen-user-module
