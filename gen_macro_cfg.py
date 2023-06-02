@@ -28,7 +28,7 @@ def get_macro_size(name):
 def validate_slot_height(y, x, valid_heights):
     slot_index = f"{y}.{x}"
     if not slot_index in slots:
-        return False
+        return False, False
 
     slot_name = slots[slot_index]["name"]
     width, height = get_macro_size(slot_name)
@@ -36,7 +36,7 @@ def validate_slot_height(y, x, valid_heights):
         raise Exception(
             f"Slot height mismatch for ${y+1}.{x} (${slot_name}): ${height} not in ${valid_heights}"
         )
-    return height
+    return height, width
 
 
 def shift_slot(y, x):
@@ -67,7 +67,7 @@ for y in range(ROWS):
     for x in range(MUX_COLS):
         # Left branch
         pos_x = LEFT_MUX_X + x * 170.66
-        slot_height = validate_slot_height(y + 1, x, valid_heights=[108.800, 220.320])
+        slot_height, slot_width = validate_slot_height(y + 1, x, valid_heights=[108.800, 220.320])
         if slot_height:
             pos_y = top_y
             if shift_slot(y + 1, x):
@@ -75,7 +75,7 @@ for y in range(ROWS):
             macrofile.write(
                 f"tt_top1.branch\[{mux_idx}\].col_um\[{x}\].um_top_I.block_{mux_idx+1}_{x}.tt_um_I  {pos_x: <7.2f} {pos_y:.2f}   FS\n"
             )
-        slot_height = validate_slot_height(y, x, valid_heights=[108.800, 220.320])
+        slot_height, slot_width = validate_slot_height(y, x, valid_heights=[108.800, 220.320])
         if slot_height:
             pos_y = bottom_y - slot_height + 108.8
             if shift_slot(y, x):
@@ -86,13 +86,17 @@ for y in range(ROWS):
 
         # Right branch
         pos_x = RIGHT_MUX_X - x * 170.66
-        if validate_slot_height(y + 1, x + 16, valid_heights=[108.800, 220.320]):
+        slot_height, slot_width = validate_slot_height(y + 1, x + 16, valid_heights=[108.800, 220.320])
+        if slot_height:
             macrofile.write(
                 f"tt_top1.branch\[{mux_idx+1}\].col_um\[{x}\].um_top_I.block_{mux_idx+1}_{x+16}.tt_um_I {pos_x: <7.2f} {top_y:.2f}   S\n"
             )
-        slot_height = validate_slot_height(y, x + 16, valid_heights=[108.800, 220.320])
+        slot_height, slot_width = validate_slot_height(y, x + 16, valid_heights=[108.800, 220.320])
         if slot_height:
             pos_y = bottom_y - slot_height + 108.8
+            if shift_slot(y, x + 16):
+                pos_y -= slot_height
+                pos_x -= slot_width - 170.66
             macrofile.write(
                 f"tt_top1.branch\[{mux_idx+1}\].col_um\[{x}\].um_bot_I.block_{mux_idx}_{x+16}.tt_um_I {pos_x: <7.2f} {pos_y:.2f}   FN\n"
             )
