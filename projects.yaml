@@ -83,17 +83,17 @@
   status: active
   fill: false
 21:
-  url: https://github.com/TinyTapeout/tt03p5-test
+  url: https://github.com/psychogenic/tt03p5-7segstringdisplay
   status: active
-  fill: true
+  fill: false
 22:
-  url: https://github.com/TinyTapeout/tt03p5-test
+  url: https://github.com/psychogenic/tt03p5-padlock
   status: active
-  fill: true
+  fill: false
 23:
-  url: https://github.com/TinyTapeout/tt03p5-test
+  url: https://github.com/psychogenic/tt03p5-UARTstring
   status: active
-  fill: true
+  fill: false
 24:
   url: https://github.com/TinyTapeout/tt03p5-test
   status: active
