@@ -67,7 +67,8 @@ for y in range(ROWS):
     for x in range(MUX_COLS):
         # Left branch
         pos_x = LEFT_MUX_X + x * 170.66
-        if validate_slot_height(y + 1, x, valid_heights=[108.800, 220.320]):
+        slot_height = validate_slot_height(y + 1, x, valid_heights=[108.800, 220.320])
+        if slot_height:
             pos_y = top_y
             if shift_slot(y + 1, x):
                 pos_y += slot_height
