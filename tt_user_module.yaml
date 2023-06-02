@@ -1,5 +1,6 @@
 "0.0": 
   name: "as1802"
+  shift: true
 "0.1": 
   name: "urish_simon"
 "0.2": 
@@ -29,7 +30,8 @@
 "1.2": 
   name: "htfab_totp"
 "1.4": 
-  name: "psychogenic_neptuneproportional"
+  name: "Reloj_top"
+  shift: true
 "1.5": 
   name: "algofoogle_solo_squash"
 "1.6": 
@@ -47,7 +49,7 @@
 "1.20": 
   name: "millerresearch_top"
 "1.21": 
-  name: "test"
+  name: "psychogenic_neptuneproportional"
 "1.22": 
   name: "test"
 "1.23": 
