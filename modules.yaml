@@ -13,7 +13,7 @@ modules:
     width: 4
     height: 2
     y: 5
-    x: 0
+    x: 4
   - name: "moyes0_top_module"
   - name: "vga_clock"
     width: 1
@@ -47,6 +47,11 @@ modules:
     width: 1
     height: 2
   - name: "psychogenic_neptuneproportional"
+  - name: "greycode_top"
+    width: 2
+    height: 2
+    y: 5
+    x: 2
   - name: "test"
 
 # Add a bunch of loopback modules to test the input / output timings
@@ -126,8 +131,3 @@ modules:
 # The following module causes a disconnected pins error, so it's disabled for now:
 #  - name: "urish_sram_poc"
 #    sram: true
-
-# The following module causes detailed routing to fail, so it's disabled for now:
-#  - name: "greycode_top"
-#    width: 4
-#    height: 2
