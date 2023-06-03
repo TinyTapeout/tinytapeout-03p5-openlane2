@@ -4,11 +4,9 @@ on: [ push, workflow_dispatch ]
 jobs:
   gds:
     env:
-        OPENLANE_TAG:           2023.02.14
-        OPENLANE_IMAGE_NAME:    efabless/openlane:2023.05.19
-        OPENLANE_ROOT:          /home/runner/openlane
-        PDK_ROOT:               /home/runner/pdk
-        PDK:                    sky130A
+      OPENLANE_TAG: 4a4de6ab426c8e53ae9534fdba2366a863a5af7e
+      SKY130_PDK_VERSION: 12df12e2e74145e31c5a13de02f9a1e176b56e67
+      PYTHONIOENCODING: utf-8
 
     # ubuntu
     runs-on: ubuntu-latest
@@ -24,7 +22,7 @@ jobs:
       with:
         repository: tinytapeout/tt-multiplexer
         path: tt-multiplexer
-        ref: tt03p5
+        ref: ol2
 
     - name: checkout tt-support-tools repo
       uses: actions/checkout@v3
@@ -33,13 +31,23 @@ jobs:
         path: tt
         ref: tt03p5
 
+    - name: checkout openlane2 repo
+      uses: actions/checkout@v3
+      with:
+        repository: efabless/openlane2
+        path: openlane2
+        ref: ${{ env.OPENLANE_TAG }}
+
+    - name: patch OpenLane 2
+      working-directory: openlane2
+      run: git apply ../patches/openlane2.patch
+
     # Set Python up
     - name: setup python
       uses: actions/setup-python@v4
       with:
         python-version: '3.10'
-    - run: pip install -r tt-multiplexer/proto/requirements.txt
-    - run: pip install -r tt/requirements.txt
+    - run: pip install -r tt-multiplexer/py/requirements.txt -r tt/requirements.txt
 
     # Install yosys (required for tt/configure.py)
     - name: install oss-cad-suite
@@ -49,49 +57,75 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
    
     - name: Fetch user project, update caravel configuration
-      run: python ./tt/configure.py --clone-all --fetch-gds --update-caravel --sram-support
+      run: python ./tt/configure.py --clone-all --fetch-gds --update-caravel
       env:
-        GH_TOKEN:       ${{ secrets.GH_TOKEN }}
-        GH_USERNAME:    ${{ secrets.GH_USERNAME }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Install tools
-      run: make setup
+    - uses: cachix/install-nix-action@v20
+      
+    - uses: cachix/cachix-action@v12
+      with:
+        name: openlane
+        extraPullNames: openlane
 
-    # build OpenLane
-    - name: openlane repo
+    - name: Install Sky130 PDK
       run: |
-        rm -rf $OPENLANE_ROOT
-        git clone --depth=1 --branch $OPENLANE_TAG https://github.com/The-OpenROAD-Project/OpenLane.git $OPENLANE_ROOT
-        cd $OPENLANE_ROOT
-        make
-
-    # uncompress any gds commited to the repo
-    - name: uncompress gds
-      run: | 
-        make uncompress
-
-    - name: generate tt_user_module.v
-      run: make gen-user-module
+        pip3 install volare
+        volare enable --pdk sky130 ${{ env.SKY130_PDK_VERSION }}
+    
+    - name: Generate sources from user macro configuration
+      working-directory: tt-multiplexer
+      run: |
+        cp ../modules.yaml cfg/modules.yaml
+        make gensrc
 
     # run OpenLane to build the GDS
-    - name: make tt_ctrl GDS
-      run: make tt_ctrl
+    - name: Harden tt_ctrl
+      working-directory: tt-multiplexer/ol2/tt_ctrl
+      run: nix-shell $GITHUB_WORKSPACE/openlane2/shell.nix --run "python build.py"      
 
-    - name: make tt_mux GDS
-      run: make tt_mux
+    - name: Harden tt_mux
+      working-directory: tt-multiplexer/ol2/tt_mux
+      run: nix-shell $GITHUB_WORKSPACE/openlane2/shell.nix --run "python build.py"
 
-    # Create caravel config
-    - name: Generate macro.cfg
-      run: python gen_macro_cfg.py
+    - name: Copy macros
+      working-directory: tt-multiplexer
+      run: |
+        cp ol2/tt_ctrl/runs/RUN_*/final/gds/tt_ctrl.magic.gds ol2/tt_top/gds/tt_ctrl.gds
+        cp ol2/tt_ctrl/runs/RUN_*/final/lef/tt_ctrl.lef ol2/tt_top/lef
+        cp ol2/tt_mux/runs/RUN_*/final/gds/tt_mux.magic.gds ol2/tt_top/gds/tt_mux.gds
+        cp ol2/tt_mux/runs/RUN_*/final/lef/tt_mux.lef ol2/tt_top/lef
+        cp ../gds/*.gds ol2/tt_top/gds
+        cp ../lef/*.lef ol2/tt_top/lef
 
-    - name: make user_project_wrapper GDS
-      run: make user_project_wrapper
+    - name: Harden tt_top
+      working-directory: tt-multiplexer/ol2/tt_top
+      run: nix-shell $GITHUB_WORKSPACE/openlane2/shell.nix --run "python build.py"
+
+    - name: Copy final results
+      working-directory: tt-multiplexer
+      run: |
+        cp ol2/tt_ctrl/runs/RUN_*/final/gds/tt_ctrl.magic.gds ../gds/tt_ctrl.gds
+        cp ol2/tt_ctrl/runs/RUN_*/final/lef/tt_ctrl.lef ../lef/tt_ctrl.lef
+        cp ol2/tt_ctrl/runs/RUN_*/final/pnl/tt_ctrl.pnl.v ../verilog/gl/tt_ctrl.v
+        cp ol2/tt_ctrl/runs/RUN_*/final/nl/tt_ctrl.nl.v ../verilog/gl/tt_ctrl.nl.v
+        cp -r ol2/tt_ctrl/runs/RUN_*/final/spef/* ../spef/
+        cp ol2/tt_mux/runs/RUN_*/final/gds/tt_mux.magic.gds ../gds/tt_mux.gds
+        cp ol2/tt_mux/runs/RUN_*/final/lef/tt_mux.lef ../lef/tt_mux.lef
+        cp ol2/tt_mux/runs/RUN_*/final/pnl/tt_mux.pnl.v ../verilog/gl/tt_mux.v
+        cp ol2/tt_mux/runs/RUN_*/final/nl/tt_mux.nl.v ../verilog/gl/tt_mux.nl.v
+        cp -r ol2/tt_mux/runs/RUN_*/final/spef/* ../spef/
+        cp ol2/tt_top/runs/RUN_*/final/gds/user_project_wrapper.magic.gds ../gds/user_project_wrapper.gds
+        cp ol2/tt_top/runs/RUN_*/final/lef/user_project_wrapper.lef ../lef/user_project_wrapper.lef
+        cp ol2/tt_top/runs/RUN_*/final/pnl/user_project_wrapper.pnl.v ../verilog/gl/user_project_wrapper.v
+        cp ol2/tt_top/runs/RUN_*/final/nl/user_project_wrapper.nl.v ../verilog/gl/user_project_wrapper.nl.v
+        cp -r ol2/tt_top/runs/RUN_*/final/spef/* ../spef/
 
     - name: upload GDS artifact
       uses: actions/upload-artifact@v3
       with:
           name: GDS
-          path: openlane/user_project_wrapper/runs/user_project_wrapper/results/final/*
+          path: tt-multiplexer/ol2/tt_top/runs/RUN_*/*
 
     - name: upload macros artifact
       uses: actions/upload-artifact@v3

@@ -1,0 +1,57 @@
+modules:
+  - name: "as1802"
+    width: 8
+    height: 2
+  - name: "urish_simon"
+    width: 1
+    height: 2
+  - name: "kiwih_tt_top"
+    width: 1
+    height: 2
+  - name: "wokwi_366318576852367361"
+  - name: "urish_dffram"
+    width: 4
+    height: 2
+  - name: "moyes0_top_module"
+  - name: "vga_clock"
+    width: 1
+    height: 2
+  - name: "TrainLED2_top"
+  - name: "tomkeddie_a"
+    width: 2
+    height: 2
+  - name: "ternaryPC_radixconvert"
+  - name: "MichaelBell_hovalaag"
+    width: 1
+    height: 2
+  - name: "cam" # https://github.com/irtzonevrakis/tt03p5-content-addressable-memory
+  - name: "loopback"
+  - name: "power_test"
+  - name: "htfab_totp"
+    width: 2
+    height: 2
+  - name: "gatecat_fpga_top"
+    width: 1
+    height: 2
+  - name: "Reloj_top"
+    width: 2
+    height: 2
+  - name: "algofoogle_solo_squash"
+  - name: "apu_pulse"
+  - name: "thorkn_vgaclock"
+  - name: "loopback"
+  - name: "wokwi_347497504164545108" # psychogenic/tt03p5-7segstringdisplay
+  - name: "wokwi_347144898258928211" # psychogenic/tt03p5-UARTstring
+  - name: "wokwi_347417602591556180" # psychogenic/tt03p5-padlock
+  - name: "millerresearch_top"
+    width: 1
+    height: 2
+  - name: "psychogenic_neptuneproportional"
+  - name: "test"
+  - name: "urish_sram_poc"
+    sram: true
+
+# The following module causes detailed routing to fail, so it's disabled for now:
+#  - name: "greycode_top"
+#    width: 4
+#    height: 2
