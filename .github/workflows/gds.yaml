@@ -26,7 +26,9 @@ jobs:
 
     - name: Patch tt-multiplexer
       working-directory: tt-multiplexer
-      run: git apply ../patches/tt_top_power.patch
+      run: |
+        git apply ../patches/tt_top_no_xor.patch
+        git apply ../patches/tt_top_power.patch
 
     - name: checkout tt-support-tools repo
       uses: actions/checkout@v3
