@@ -52,6 +52,7 @@ modules:
     height: 2
     y: 5
     x: 2
+  - name: "ringosc_cnt"
   - name: "test"
 
 # Add a bunch of loopback modules to test the input / output timings
