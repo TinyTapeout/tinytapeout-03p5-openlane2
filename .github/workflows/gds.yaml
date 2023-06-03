@@ -82,10 +82,7 @@ jobs:
         volare enable --pdk sky130 ${{ env.SKY130_PDK_VERSION }}
     
     - name: Generate sources from user macro configuration
-      working-directory: tt-multiplexer
-      run: |
-        cp ../modules.yaml cfg/modules.yaml
-        make gensrc
+      run: make gen-module-placement
 
     # run OpenLane to build the GDS
     - name: Harden tt_ctrl
