@@ -48,8 +48,10 @@ modules:
     height: 2
   - name: "psychogenic_neptuneproportional"
   - name: "test"
-  - name: "urish_sram_poc"
-    sram: true
+
+# The following module causes a disconnected pins error, so it's disabled for now:
+#  - name: "urish_sram_poc"
+#    sram: true
 
 # The following module causes detailed routing to fail, so it's disabled for now:
 #  - name: "greycode_top"
