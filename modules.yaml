@@ -9,9 +9,11 @@ modules:
     width: 1
     height: 2
   - name: "wokwi_366318576852367361"
-#  - name: "urish_dffram"
-#    width: 4
-#    height: 2
+  - name: "urish_dffram"
+    width: 4
+    height: 2
+    y: 5
+    x: 0
   - name: "moyes0_top_module"
   - name: "vga_clock"
     width: 1
