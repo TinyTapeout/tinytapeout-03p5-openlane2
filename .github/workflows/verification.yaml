@@ -7,16 +7,6 @@ jobs:
         OPENLANE_ROOT:      /home/runner/openlane
         PDK_ROOT:           /home/runner/pdk
         PDK:                sky130A
-        GH_TOKEN:           ${{ secrets.GH_TOKEN }}
-        GH_USERNAME:        ${{ secrets.GH_USERNAME }}
-        DESIGNS:            /home/runner/work/tinytapeout-03p5/tinytapeout-03p5
-        TARGET_PATH:        /home/runner/work/tinytapeout-03p5/tinytapeout-03p5
-        MGMT_AREA_ROOT:     /home/runner/work/tinytapeout-03p5/tinytapeout-03p5/mgmt_core_wrapper
-        MCW_ROOT:           /home/runner/work/tinytapeout-03p5/tinytapeout-03p5/mgmt_core_wrapper
-        CARAVEL_ROOT:       /home/runner/work/tinytapeout-03p5/tinytapeout-03p5/caravel
-        CORE_VERILOG_PATH:  /home/runner/work/tinytapeout-03p5/tinytapeout-03p5/mgmt_core_wrapper/verilog
-        GCC_PATH:           /home/runner/riscv64-unknown-elf-gcc-8.3.0-2020.04.1-x86_64-linux-ubuntu14/bin/
-        GCC_PREFIX:         riscv64-unknown-elf
 
     # ubuntu
     runs-on: ubuntu-latest
@@ -39,19 +29,7 @@ jobs:
       with:
         repository: tinytapeout/tt-multiplexer
         path: tt-multiplexer
-        ref: tt03p5
-
-    # get caravel makefile and management core for sims. need PDK for some of the verification
-    - name: caravel & PDK
-      run: |
-        make setup
-
-    # install riscv gcc
-    - name: riscv gcc
-      run: |
-        cd $HOME
-        wget https://static.dev.sifive.com/dev-tools/riscv64-unknown-elf-gcc-8.3.0-2020.04.1-x86_64-linux-ubuntu14.tar.gz
-        tar -xzf riscv64-unknown-elf-gcc-8.3.0-2020.04.1-x86_64-linux-ubuntu14.tar.gz
+        ref: ol2
 
     # install oss fpga tools for cocotb and iverilog
     - name: install oss-cad-suite
@@ -65,12 +43,14 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: '3.10'
-    - run: pip install -r tt-multiplexer/proto/requirements.txt
+    - run: pip install -r tt-multiplexer/py/requirements.txt
     - run: pip install -r tt/requirements.txt
 
     # fetch the repos - test mode
     - name: fetch all
       run: python ./tt/configure.py --clone-all --fetch-gds --debug --test
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     # install projects
     - name: configure for test
@@ -78,18 +58,13 @@ jobs:
 
     # generate the tt mux verilog that instantiates all the modules - use the test version
     - name: module config
+      working-directory: tt-multiplexer
       run: |
-        cp tt_test_module.yaml tt_user_module.yaml
-        make gen-user-module
+        cp ../test_modules.yaml cfg/modules.yaml
+        make gensrc
 
     # run first set of tests
     - name: basic simulations
       run: |
         cd verilog/dv/mux
         make clean test_mux
-
-    # run caravel level test (currently disabled, as it fails because of Python setup)
-#    - name: caravel simulations
-#      run: |
-#        cd verilog/dv/mux_ext
-#        make clean coco_test
