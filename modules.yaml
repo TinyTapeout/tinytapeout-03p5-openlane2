@@ -9,9 +9,9 @@ modules:
     width: 1
     height: 2
   - name: "wokwi_366318576852367361"
-  - name: "urish_dffram"
-    width: 4
-    height: 2
+#  - name: "urish_dffram"
+#    width: 4
+#    height: 2
   - name: "moyes0_top_module"
   - name: "vga_clock"
     width: 1
@@ -25,7 +25,6 @@ modules:
     width: 1
     height: 2
   - name: "cam" # https://github.com/irtzonevrakis/tt03p5-content-addressable-memory
-  - name: "loopback"
   - name: "power_test"
   - name: "htfab_totp"
     width: 2
@@ -39,7 +38,6 @@ modules:
   - name: "algofoogle_solo_squash"
   - name: "apu_pulse"
   - name: "thorkn_vgaclock"
-  - name: "loopback"
   - name: "wokwi_347497504164545108" # psychogenic/tt03p5-7segstringdisplay
   - name: "wokwi_347144898258928211" # psychogenic/tt03p5-UARTstring
   - name: "wokwi_347417602591556180" # psychogenic/tt03p5-padlock
@@ -48,6 +46,80 @@ modules:
     height: 2
   - name: "psychogenic_neptuneproportional"
   - name: "test"
+
+# Add a bunch of loopback modules to test the input / output timings
+  - name: "loopback"
+    x: 0
+    y: 0
+  - name: "loopback"
+    x: 16
+    y: 0
+  - name: "loopback"
+    x: 0
+    y: 3
+  - name: "loopback"
+    x: 16
+    y: 3
+  - name: "loopback"
+    x: 16
+    y: 4
+  - name: "loopback"
+    x: 0
+    y: 4
+  - name: "loopback"
+    x: 16
+    y: 7
+  - name: "loopback"
+    x: 0
+    y: 7
+  - name: "loopback"
+    x: 16
+    y: 8
+  - name: "loopback"
+    x: 0
+    y: 8
+  - name: "loopback"
+    x: 16
+    y: 11
+  - name: "loopback"
+    x: 0
+    y: 11
+  - name: "loopback"
+    x: 0
+    y: 12
+  - name: "loopback"
+    x: 16
+    y: 12
+  - name: "loopback"
+    x: 0
+    y: 15
+  - name: "loopback"
+    x: 16
+    y: 15
+  - name: "loopback"
+    x: 0
+    y: 16
+  - name: "loopback"
+    x: 16
+    y: 16
+  - name: "loopback"
+    x: 0
+    y: 19
+  - name: "loopback"
+    x: 16
+    y: 19
+  - name: "loopback"
+    x: 0
+    y: 20
+  - name: "loopback"
+    x: 16
+    y: 20
+  - name: "loopback"
+    x: 0
+    y: 23
+  - name: "loopback"
+    x: 16
+    y: 23
 
 # The following module causes a disconnected pins error, so it's disabled for now:
 #  - name: "urish_sram_poc"
