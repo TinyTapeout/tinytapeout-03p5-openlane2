@@ -24,6 +24,10 @@ jobs:
         path: tt-multiplexer
         ref: ol2
 
+    - name: Patch tt-multiplexer
+      working-directory: tt-multiplexer
+      run: git apply ../patches/tt_top_power.patch
+
     - name: checkout tt-support-tools repo
       uses: actions/checkout@v3
       with:
@@ -40,7 +44,9 @@ jobs:
 
     - name: patch OpenLane 2
       working-directory: openlane2
-      run: git apply ../patches/openlane2.patch
+      run: |
+        git apply ../patches/openlane2.patch
+        git apply ../patches/openlane2_power.patch
 
     # Set Python up
     - name: setup python
