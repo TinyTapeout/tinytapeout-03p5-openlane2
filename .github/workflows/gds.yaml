@@ -80,7 +80,10 @@ jobs:
       run: |
         pip3 install volare
         volare enable --pdk sky130 ${{ env.SKY130_PDK_VERSION }}
-    
+
+    - name: uncompress gds files
+      run: gunzip -v gds/*.gds.gz
+
     - name: Generate sources from user macro configuration
       run: make gen-module-placement
 
