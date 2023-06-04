@@ -28,6 +28,7 @@ modules:
     height: 2
   - name: "cam" # https://github.com/irtzonevrakis/tt03p5-content-addressable-memory
   - name: "power_test"
+  - name: "ringosc_cnt_pfet"
   - name: "htfab_totp"
     width: 2
     height: 2
