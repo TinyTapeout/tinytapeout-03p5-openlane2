@@ -97,7 +97,9 @@ jobs:
       run: nix-shell $GITHUB_WORKSPACE/openlane2/shell.nix --run "python build.py"
 
     - name: Copy macros
-      run: make copy-macros
+      run: |
+        make copy-macros
+        cp verilog/rtl/tt_um_*.v tt-multiplexer/ol2/tt_top/verilog
 
     - name: Harden tt_top
       working-directory: tt-multiplexer/ol2/tt_top
